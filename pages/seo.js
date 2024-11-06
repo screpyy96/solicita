@@ -1,43 +1,120 @@
 import Head from 'next/head';
+import { FaSearch, FaChartLine, FaLink, FaCheckCircle, FaMobileAlt, FaCogs } from 'react-icons/fa';
 
 export default function SEO() {
+    const services = [
+        {
+            icon: <FaSearch className="w-12 h-12 text-blue-500 group-hover:text-white transition-colors duration-300" />,
+            title: "Audit SEO Complet",
+            description: "Analiză detaliată a site-ului tău pentru identificarea oportunităților de optimizare"
+        },
+        {
+            icon: <FaChartLine className="w-12 h-12 text-blue-500 group-hover:text-white transition-colors duration-300" />,
+            title: "Creștere Organică",
+            description: "Strategii pentru creșterea vizibilității în motoarele de căutare"
+        },
+        {
+            icon: <FaLink className="w-12 h-12 text-blue-500 group-hover:text-white transition-colors duration-300" />,
+            title: "Link Building",
+            description: "Construirea de legături relevante pentru creșterea autorității domeniului"
+        },
+        {
+            icon: <FaMobileAlt className="w-12 h-12 text-blue-500 group-hover:text-white transition-colors duration-300" />,
+            title: "Optimizare Mobile",
+            description: "Asigurăm experiență perfectă pe toate dispozitivele mobile"
+        }
+    ];
+
+    const stats = [
+        { number: "150%", text: "Creștere Trafic" },
+        { number: "80+", text: "Clienți Mulțumiți" },
+        { number: "5000+", text: "Cuvinte Cheie" },
+        { number: "#1", text: "Poziții Google" }
+    ];
+
     return (
-        <div className="container mx-auto px-4 py-10">
+        <>
             <Head>
-                <title>Servicii SEO - Solicita.ro</title>
-                <meta name="description" content="Oferim soluții complete de optimizare SEO pentru a îmbunătăți vizibilitatea afacerii tale online." />
-                <meta name="keywords" content="SEO, optimizare, servicii SEO, marketing digital, trafic organic" />
-                <meta name="robots" content="index, follow" />
+                <title>Servicii SEO Premium | Solicita.ro</title>
+                <meta name="description" content="Creștem vizibilitatea afacerii tale online prin servicii SEO premium și strategii personalizate de optimizare pentru motoarele de căutare." />
             </Head>
-            <h1 className="text-3xl font-bold mb-6">Servicii SEO</h1>
-            <p className="mb-4">
-                Oferim soluții complete de optimizare pentru motoarele de căutare, menite să îmbunătățească vizibilitatea afacerii tale online.
-            </p>
-            <h2 className="text-2xl font-semibold mt-6 mb-4">Ce Oferim:</h2>
-            <ul className="list-disc pl-5 mb-6">
-                <li>Audit SEO complet pentru a identifica oportunitățile de îmbunătățire.</li>
-                <li>Optimizare On-Page pentru a asigura relevanța conținutului.</li>
-                <li>Strategii de Link Building pentru a crește autoritatea site-ului.</li>
-                <li>Monitorizare și raportare a performanței SEO.</li>
-            </ul>
-            <h2 className="text-2xl font-semibold mt-6 mb-4">De ce să alegi serviciile noastre SEO?</h2>
-            <p className="mb-4">
-                Echipa noastră de experți are experiență vastă în domeniu și utilizează cele mai bune practici pentru a asigura rezultate durabile. Ne concentrăm pe strategii personalizate care se potrivesc nevoilor specifice ale afacerii tale.
-            </p>
-            <h2 className="text-2xl font-semibold mt-6 mb-4">Testimoniale</h2>
-            <blockquote className="border-l-4 border-blue-600 pl-4 italic mb-4">
-                "Serviciile SEO oferite de această echipă ne-au ajutat să creștem traficul organic cu 150% în doar 6 luni!" - Client Fericit
-            </blockquote>
-            <blockquote className="border-l-4 border-blue-600 pl-4 italic mb-4">
-                "Am observat o îmbunătățire semnificativă a ratei de conversie datorită optimizării site-ului nostru." - Alt Client Fericit
-            </blockquote>
-            <h2 className="text-2xl font-semibold mt-6 mb-4">Contactează-ne</h2>
-            <p className="mb-4">
-                Ești gata să îți îmbunătățești prezența online? <strong>Contactează-ne astăzi</strong> pentru o consultație gratuită!
-            </p>
-            <a href="#contact" className="inline-block px-8 py-4 bg-blue-600 text-white font-bold rounded-md hover:bg-blue-700 transition-colors duration-300">
-                Începe Acum
-            </a>
-        </div>
+
+            {/* Hero Section */}
+            <div className="relative bg-gradient-to-r from-blue-900 via-blue-800 to-blue-900 text-white">
+                <div className="absolute inset-0 bg-[url('/patterns/circuit-board.svg')] opacity-10"></div>
+                <div className="container mx-auto px-4 py-20">
+                    <div className="max-w-3xl">
+                        <h1 className="text-5xl font-bold mb-6">
+                            Domină Prima Pagină <br/>
+                            <span className="bg-gradient-to-r from-blue-400 to-cyan-300 text-transparent bg-clip-text">
+                                din Google
+                            </span>
+                        </h1>
+                        <p className="text-xl mb-8 text-gray-300">
+                            Servicii SEO premium care aduc rezultate măsurabile și trafic organic relevant pentru afacerea ta
+                        </p>
+                        <div className="flex gap-4">
+                            <a href="#audit" 
+                               className="px-8 py-4 bg-white text-blue-900 rounded-xl font-semibold hover:bg-blue-50 transition-all">
+                                Solicită Audit Gratuit
+                            </a>
+                            <a href="#services" 
+                               className="px-8 py-4 border-2 border-white rounded-xl font-semibold hover:bg-white/10 transition-all">
+                                Vezi Serviciile
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Stats Section */}
+            <div className="bg-white py-16">
+                <div className="container mx-auto px-4">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                        {stats.map((stat, index) => (
+                            <div key={index} className="text-center">
+                                <div className="text-4xl font-bold text-blue-600 mb-2">{stat.number}</div>
+                                <div className="text-gray-600">{stat.text}</div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            {/* Services Section */}
+            <div id="services" className="py-20 bg-gray-50">
+                <div className="container mx-auto px-4">
+                    <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
+                        Servicii Complete de Optimizare
+                    </h2>
+                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        {services.map((service, index) => (
+                            <div key={index} 
+                                 className="group bg-white p-8 rounded-2xl shadow-lg hover:bg-blue-600 hover:text-white transition-all duration-300 transform hover:-translate-y-2">
+                                <div className="mb-6">
+                                    {service.icon}
+                                </div>
+                                <h3 className="text-xl font-bold mb-4">{service.title}</h3>
+                                <p className="text-gray-600 group-hover:text-gray-200">{service.description}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            {/* CTA Section */}
+            <div className="bg-blue-900 text-white py-20">
+                <div className="container mx-auto px-4 text-center">
+                    <h2 className="text-3xl md:text-4xl font-bold mb-8">Pregătit să Crești Online?</h2>
+                    <p className="text-xl mb-12 max-w-2xl mx-auto text-gray-300">
+                        Hai să discutăm despre cum putem îmbunătăți prezența ta în mediul online
+                    </p>
+                    <a href="#contact" 
+                       className="inline-block px-12 py-5 bg-white text-blue-900 rounded-xl font-bold text-lg hover:bg-blue-50 transition-all">
+                        Contactează-ne Acum
+                    </a>
+                </div>
+            </div>
+        </>
     );
 } 

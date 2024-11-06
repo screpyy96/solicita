@@ -1,11 +1,12 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { ChevronRight, Search, Code, BarChart } from 'lucide-react'
 
 const TechWorkProcess = () => {
   const [activeStep, setActiveStep] = useState(0)
+  const canvasRef = useRef(null)
 
   const steps = [
     {
@@ -32,9 +33,10 @@ const TechWorkProcess = () => {
   ]
 
   useEffect(() => {
-    const canvas = document.getElementById('tech-background')
-    const ctx = canvas.getContext('2d')
+    const canvas = canvasRef.current
+    if (!canvas) return
     
+    const ctx = canvas.getContext('2d')
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
 
@@ -100,7 +102,7 @@ const TechWorkProcess = () => {
 
   return (
     <section className="py-24 md:py-36 bg-gradient-to-r from-gray-900 to-blue-900 relative overflow-hidden">
-      <canvas id="tech-background" className="absolute inset-0" />
+      <canvas ref={canvasRef} className="absolute inset-0" />
       <div className="relative container mx-auto px-4 z-10">
         <h2 className="mb-20 text-4xl xl:text-5xl text-white text-center font-bold">
           Cum Lucrăm
@@ -132,7 +134,7 @@ const TechWorkProcess = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="bg-white/10 rounded-xl p-8"
+              className="bg-white/10 rounded-xl p-4"
             >
               <h3 className="text-2xl text-white font-bold mb-4">{steps[activeStep].title}</h3>
               <p className="text-lg text-gray-300 leading-relaxed mb-6">{steps[activeStep].description}</p>

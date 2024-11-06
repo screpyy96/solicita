@@ -23,7 +23,7 @@ const TechPricing = () => {
     {
       name: "Business",
       description: "Pentru echipe și afaceri în creștere",
-      price: { monthly: 32, yearly: 320 },
+      price: { monthly: 52, yearly: 620 },
       features: [
         "Clienți nelimitați",
         "Sarcini nelimitate",
@@ -35,7 +35,7 @@ const TechPricing = () => {
     {
       name: "Enterprise",
       description: "Pentru corporații și echipe mari",
-      price: { monthly: 68, yearly: 680 },
+      price: { monthly: 104, yearly: 1240 },
       features: [
         "Programare & încărcare angajați",
         "Onboarding & training gratuit",
@@ -90,7 +90,7 @@ const TechPricing = () => {
                 <p className="mb-6 text-gray-400">{plan.description}</p>
                 <div className="mb-8">
                   <span className="text-4xl font-bold text-white">
-                    ${isYearly ? plan.price.yearly : plan.price.monthly}
+                    RON {isYearly ? plan.price.yearly : plan.price.monthly}
                   </span>
                   <span className="text-gray-400">
                     {isYearly ? '/an' : '/lună'}
