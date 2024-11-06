@@ -1,0 +1,33 @@
+# https://solicita.ro/robots.txt
+User-agent: *
+Allow: /
+
+# Blocăm accesul la paginile administrative sau de test
+Disallow: /admin/
+Disallow: /test/
+Disallow: /preview/
+Disallow: /temp/
+
+# Blocăm accesul la paginile de căutare pentru a evita duplicate content
+Disallow: /search/
+Disallow: /*?s=
+Disallow: /*?q=
+Disallow: /*?query=
+
+# Blocăm accesul la paginile cu parametri de filtrare/sortare
+Disallow: /*?sort=
+Disallow: /*?filter=
+Disallow: /*?page=
+Disallow: /*?per_page=
+
+# Permitem accesul la fișierele statice importante
+Allow: /*.js$
+Allow: /*.css$
+Allow: /*.png$
+Allow: /*.jpg$
+Allow: /*.gif$
+Allow: /*.svg$
+Allow: /*.ico$
+
+# Sitemap
+Sitemap: https://solicita.ro/sitemap.xml

@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import { FaSearch, FaChartLine, FaLink, FaCheckCircle, FaMobileAlt, FaCogs } from 'react-icons/fa';
+import { NextSeo } from 'next-seo';
 
 export default function SEO() {
     const services = [
@@ -34,10 +35,40 @@ export default function SEO() {
 
     return (
         <>
-            <Head>
-                <title>Servicii SEO Premium | Solicita.ro</title>
-                <meta name="description" content="Creștem vizibilitatea afacerii tale online prin servicii SEO premium și strategii personalizate de optimizare pentru motoarele de căutare." />
-            </Head>
+            <NextSeo
+                title="Servicii SEO Premium | Agenție SEO București | Solicita.ro"
+                description="Creștem vizibilitatea afacerii tale online prin servicii SEO premium și strategii personalizate de optimizare pentru motoarele de căutare. Experți în SEO din București."
+                canonical="https://solicita.ro/seo"
+                openGraph={{
+                    url: 'https://solicita.ro/seo',
+                    title: 'Servicii SEO Premium | Agenție SEO București | Solicita.ro',
+                    description: 'Servicii complete de optimizare SEO pentru afaceri. Creștem traficul organic și vizibilitatea online a business-ului tău.',
+                    images: [
+                        {
+                            url: 'https://solicita.ro/images/seo-services-og.jpg',
+                            width: 1200,
+                            height: 630,
+                            alt: 'Servicii SEO Premium Solicita.ro',
+                            type: 'image/jpeg',
+                        }
+                    ],
+                    siteName: 'Solicita.ro',
+                }}
+                additionalMetaTags={[
+                    {
+                        name: 'keywords',
+                        content: 'servicii seo, optimizare seo, agenție seo bucurești, seo romania, marketing digital, audit seo, consultanță seo'
+                    },
+                    {
+                        name: 'robots',
+                        content: 'index, follow'
+                    },
+                    {
+                        property: 'article:modified_time',
+                        content: new Date().toISOString()
+                    }
+                ]}
+            />
 
             {/* Hero Section */}
             <div className="relative bg-gradient-to-r from-blue-900 via-blue-800 to-blue-900 text-white">
