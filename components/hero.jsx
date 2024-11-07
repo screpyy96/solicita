@@ -1,11 +1,21 @@
 'use client'
 
 import React, { useEffect, useRef } from 'react'
-import { motion, useAnimation } from 'framer-motion'
+import { motion, useAnimation, useInView } from 'framer-motion'
+import { ArrowRight, Code, Search, Smartphone } from 'lucide-react'
+import { Button } from "@/components/ui/button"
 
-const TechHero = () => {
+export default function TechAgencyHero() {
   const canvasRef = useRef(null)
   const controls = useAnimation()
+  const ref = useRef(null)
+  const isInView = useInView(ref)
+
+  useEffect(() => {
+    if (isInView) {
+      controls.start('visible')
+    }
+  }, [controls, isInView])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -22,91 +32,134 @@ const TechHero = () => {
     resizeCanvas()
     window.addEventListener('resize', resizeCanvas)
 
-    const particles = []
-    const particleCount = 100
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width
+        this.y = Math.random() * canvas.height
+        this.size = Math.random() * 2 + 1
+        this.speedX = Math.random() * 3 - 1.5
+        this.speedY = Math.random() * 3 - 1.5
+        this.connections = []
+      }
 
-    for (let i = 0; i < particleCount; i++) {
-      particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        size: Math.random() * 2 + 1,
-        speedX: (Math.random() - 0.5) * 0.5,
-        speedY: (Math.random() - 0.5) * 0.5
-      })
-    }
+      update() {
+        this.x += this.speedX
+        this.y += this.speedY
 
-    const drawParticles = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.5)'
+        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1
+        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1
+      }
 
-      particles.forEach((particle) => {
+      draw() {
         ctx.beginPath()
-        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2)
+        ctx.fillStyle = 'rgba(100, 200, 255, 0.7)'
         ctx.fill()
+      }
 
-        particle.x += particle.speedX
-        particle.y += particle.speedY
+      connect() {
+        this.connections = particles.filter(
+          particle => 
+            particle !== this && 
+            Math.hypot(this.x - particle.x, this.y - particle.y) < 100
+        ).slice(0, 3)
 
-        if (particle.x < 0 || particle.x > canvas.width) particle.speedX *= -1
-        if (particle.y < 0 || particle.y > canvas.height) particle.speedY *= -1
-      })
-
-      requestAnimationFrame(drawParticles)
+        this.connections.forEach(particle => {
+          ctx.beginPath()
+          ctx.moveTo(this.x, this.y)
+          ctx.lineTo(particle.x, particle.y)
+          ctx.strokeStyle = 'rgba(100, 200, 255, 0.2)'
+          ctx.lineWidth = 0.5
+          ctx.stroke()
+        })
+      }
     }
 
-    drawParticles()
+    const particles = []
+    for (let i = 0; i < 100; i++) {
+      particles.push(new Particle())
+    }
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      particles.forEach(particle => {
+        particle.update()
+        particle.draw()
+        particle.connect()
+      })
+      requestAnimationFrame(animate)
+    }
+
+    animate()
 
     return () => {
       window.removeEventListener('resize', resizeCanvas)
     }
   }, [])
 
-  useEffect(() => {
-    controls.start({ opacity: 1, y: 0, transition: { duration: 0.8, staggerChildren: 0.2 } })
-  }, [controls])
-
   const services = [
-    { title: 'Servicii SEO', description: 'Optimizare pentru motoarele de căutare', icon: '🔍' },
-    { title: 'Dezvoltare Web', description: 'Site-uri web personalizate și eficiente', icon: '💻' },
-    { title: 'Dezvoltare Mobilă', description: 'Aplicații native și cross-platform', icon: '📱' },
+    { title: 'Servicii SEO', description: 'Optimizare pentru motoarele de căutare', icon: Search },
+    { title: 'Dezvoltare Web', description: 'Site-uri web personalizate și eficiente', icon: Code },
+    { title: 'Dezvoltare Mobilă', description: 'Aplicații native și cross-platform', icon: Smartphone },
   ]
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+      },
+    },
+  }
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+    },
+  }
+
   return (
-    <section className="relative min-h-screen overflow-hidden bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900">
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTIwIDM1YzguMjg0IDAgMTUtNi43MTYgMTUtMTUgMC04LjI4NC06LjcxNi0xNS0xNS0xNS04LjI4NCAwLTE1IDYuNzE2LTE1IDE1IDAgOC4yODQgNi43MTYgMTUgMTUgMTV6bTAtNWM1LjUyMyAwIDEwLTQuNDc3IDEwLTEwcy00LjQ3Ny0xMC0xMC0xMC0xMCA0LjQ3Ny0xMCAxMCA0LjQ3NyAxMCAxMCAxMHoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-10"></div>
-      </div>
+    <section className="relative min-h-screen overflow-hidden bg-gradient-to-br from-gray-900 via-blue-900 to-indigo-900">
       <canvas ref={canvasRef} className="absolute inset-0" />
-      <div className="absolute inset-0 bg-gradient-to-t from-blue-900/50 to-transparent"></div>
+      <div className="absolute inset-0 bg-gradient-to-t from-gray-900/70 to-transparent"></div>
       <div className="relative z-10 container mx-auto px-4 py-20 md:py-32">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          ref={ref}
+          initial="hidden"
           animate={controls}
+          variants={containerVariants}
           className="max-w-4xl mx-auto text-center mb-16"
         >
-          <h1 className="mb-6 text-4xl md:text-5xl xl:text-6xl font-bold text-white">
-            Soluții Digitale
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
-              Pentru Afacerea Ta
+          <motion.h1 variants={itemVariants} className="mb-6 text-4xl md:text-5xl xl:text-6xl font-bold text-white">
+            Inovație Digitală
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
+              Pentru Succesul Tău Online
             </span>
-          </h1>
-          <p className="mb-8 text-xl text-white font-medium leading-relaxed">
-            Expertiză în SEO, Dezvoltare Web și Aplicații Mobile pentru a-ți impulsiona prezența digitală.
-          </p>
+          </motion.h1>
+          <motion.p variants={itemVariants} className="mb-8 text-xl text-white font-medium leading-relaxed">
+            Expertiză în SEO, Dezvoltare Web și Aplicații Mobile pentru a-ți transforma viziunea în realitate digitală.
+          </motion.p>
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial="hidden"
           animate={controls}
+          variants={containerVariants}
           className="grid grid-cols-1 md:grid-cols-3 gap-8"
         >
-          {services.map((service, index) => (
+          {services.map((service) => (
             <motion.div
               key={service.title}
+              variants={itemVariants}
               className="p-6 bg-white/10 backdrop-blur-md rounded-lg border border-white/20 cursor-pointer transition-all duration-300 hover:bg-white/20 group"
               whileHover={{ scale: 1.05 }}
             >
-              <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">{service.icon}</div>
+              <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">
+                <service.icon className="w-12 h-12 text-cyan-400" />
+              </div>
               <h3 className="text-xl text-white font-semibold mb-2">{service.title}</h3>
               <p className="text-white/80">{service.description}</p>
             </motion.div>
@@ -114,21 +167,24 @@ const TechHero = () => {
         </motion.div>
 
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
+          initial="hidden"
           animate={controls}
+          variants={containerVariants}
           className="mt-16 text-center"
         >
-          <a
-            href="#contact"
-            className="inline-block px-8 py-4 text-lg font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-md transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+          <Button
+            asChild
+            size="lg"
+            className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-md transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
           >
-            Începe Acum
-          </a>
+            <a href="#contact">
+              Începe Acum
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </a>
+          </Button>
         </motion.div>
       </div>
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-blue-900 to-transparent"></div>
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-gray-900 to-transparent"></div>
     </section>
   )
 }
-
-export default TechHero

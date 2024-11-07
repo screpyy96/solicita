@@ -2,85 +2,169 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Menu, X, ChevronDown } from 'lucide-react'
+import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 const Navbar = () => {
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
-  const [dropdown, setDropdown] = useState(false)
+  const [openDropdown, setOpenDropdown] = useState(null)
 
   const toggleMobileNav = () => {
     setMobileNavOpen(!mobileNavOpen)
   }
 
-  return (
-    <section className="relative" style={{ background: "url('/gradient-navigation.jpg') no-repeat left center", backgroundSize: 'cover' }}>
-      <nav className="relative px-12 py-5 bg-gray-800 bg-opacity-75">
-        <div className="flex items-center justify-between">
-          <Link href="/" className="relative z-10 pr-4 lg:pr-0">
-            <img className="h-9" src="/logo.svg" alt="Logo" />
-          </Link>
-          <ul className="hidden xl:absolute xl:top-1/2 xl:left-1/2 xl:transform xl:-translate-y-1/2 xl:-translate-x-1/2 xl:flex lg:justify-center gap-14">
-            <li><Link href="/seo" className="text-lg text-white hover:text-gray-300 font-medium transition duration-200">Servicii SEO</Link></li>
-            <li><Link href="/web-development" className="text-lg text-white hover:text-gray-300 font-medium transition duration-200">Dezvoltare Web</Link></li>
-            <li>
-              <Link href="/mobile-development" onMouseEnter={() => setDropdown(true)} onMouseLeave={() => setDropdown(false)} className="flex items-center text-lg text-white hover:text-gray-300 font-medium transition duration-200">
-                <span className="mr-2.5">Dezvoltare Mobilă</span>
-                
-              </Link>
-            </li>
-            <li><Link href="/ads" className="text-lg text-white hover:text-gray-300 font-medium transition duration-200">Publicitate Online</Link></li>
-          </ul>
-          <div className="hidden xl:flex items-center gap-2">
-            <Link 
-              href="/contact" 
-              className="inline-flex justify-center items-center text-center h-12 p-5 px-6 font-semibold text-white hover:text-blue-500 focus:text-blue-500 bg-transparent hover:bg-white focus:bg-white border border-white rounded-full focus:ring-4 focus:ring-white focus:ring-opacity-50 transition duration-200"
-            >
-              Contactează-ne
-            </Link>
-          </div>
-          <button onClick={toggleMobileNav} className="flex items-center justify-center h-12 p-5 text-white border border-gray-300 xl:hidden rounded-full">
-            <svg width="20" height="16" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M18.75 6.75003H1.25C0.559648 6.75003 0 7.30968 0 8.00003C0 8.69038 0.559648 9.25003 1.25 9.25003H18.75C19.4404 9.25003 20 8.69038 20 8.00003C20 7.30968 19.4404 6.75003 18.75 6.75003Z" fill="currentColor"></path>
-              <path d="M1.25 3.41669H18.75C19.4404 3.41669 20 2.85704 20 2.16669C20 1.47634 19.4404 0.916687 18.75 0.916687H1.25C0.559648 0.916687 0 1.47634 0 2.16669C0 2.85704 0.559648 3.41669 1.25 3.41669Z" fill="currentColor"></path>
-              <path d="M18.75 12.5834H1.25C0.559648 12.5834 0 13.143 0 13.8334C0 14.5237 0.559648 15.0834 1.25 15.0834H18.75C19.4404 15.0834 20 14.5237 20 13.8334C20 13.143 19.4404 12.5834 18.75 12.5834Z" fill="currentColor"></path>
-            </svg>
-          </button>
-        </div>
-      </nav>
+  const closeMobileNav = () => {
+    setMobileNavOpen(false)
+  }
 
-      {/* Mobile Navigation */}
-      <div className={`fixed inset-0 z-50 xl:hidden ${mobileNavOpen ? 'block' : 'hidden'}`}>
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-75" aria-hidden="true" onClick={toggleMobileNav}></div>
-        <nav className="fixed top-0 right-0 bottom-0 w-full max-w-xs bg-white shadow-xl flex flex-col">
-          <div className="p-4 flex items-center justify-between border-b border-gray-200">
-            <Link href="#" className="flex-shrink-0">
-              <img className="h-8 w-auto" src="/logo.svg" alt="Logo" />
+  const navItems = [
+    { name: 'Servicii SEO', href: '/seo' },
+    { name: 'Dezvoltare Web', href: '/web-development' },
+    {
+      name: 'Dezvoltare Mobilă',
+      href: '/mobile-development',
+      dropdownItems: [
+        { name: 'iOS', href: '/mobile-development/ios' },
+        { name: 'Android', href: '/mobile-development/android' },
+        { name: 'Cross-Platform', href: '/mobile-development/cross-platform' },
+      ],
+    },
+    { name: 'Publicitate Online', href: '/ads' },
+  ]
+
+  return (
+    <nav className="fixed w-full z-50 bg-gradient-to-r from-gray-900/80 to-blue-900/80 backdrop-blur-md">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          <div className="flex-shrink-0">
+            <Link href="/" className="flex items-center">
+              <img className="h-8 w-auto" src="/logo1.svg" alt="Logo" />
+              <span className="ml-2 text-xl font-bold text-white">solicita.ro</span>
             </Link>
-            <button onClick={toggleMobileNav} className="rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500">
-              <span className="sr-only">Close menu</span>
-              <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6L18 18" />
-              </svg>
-            </button>
           </div>
-          <div className="flex-1 overflow-y-auto">
-            <div className="px-2 py-4 space-y-1">
-              <Link href="/seo" className="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:text-gray-800 hover:bg-gray-50">Servicii SEO</Link>
-              <Link href="/web-development" className="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:text-gray-800 hover:bg-gray-50">Dezvoltare Web</Link>
-              <Link href="/mobile-development" className="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:text-gray-800 hover:bg-gray-50">Dezvoltare Mobilă</Link>
-              <Link href="/ads" className="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:text-gray-800 hover:bg-gray-50">Publicitate Online</Link>
+          <div className="hidden md:block">
+            <div className="ml-10 flex items-baseline space-x-4">
+              {navItems.map((item) => (
+                item.dropdownItems ? (
+                  <DropdownMenu key={item.name}>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="text-white hover:bg-blue-800/50 hover:text-white">
+                        {item.name} <ChevronDown className="ml-1 h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      {item.dropdownItems.map((dropdownItem) => (
+                        <DropdownMenuItem key={dropdownItem.name}>
+                          <Link href={dropdownItem.href} className="w-full text-black hover:text-black" onClick={closeMobileNav}>
+                            {dropdownItem.name}
+                          </Link>
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className="text-white hover:bg-blue-800/50 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                  >
+                    {item.name}
+                  </Link>
+                )
+              ))}
             </div>
           </div>
-          <div className="p-4 border-t border-gray-200">
-            <Link 
-              href="/contact" 
-              className="block w-full px-4 py-2 text-center font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md"
-            >
-              Contactează-ne
-            </Link>
+          <div className="hidden md:block">
+            <Button asChild variant="outline" className="text-black border-white hover:bg-blue-800/50 hover:text-white">
+              <Link href="/contact">Contactează-ne</Link>
+            </Button>
           </div>
-        </nav>
+          <div className="md:hidden">
+            <Button variant="ghost" onClick={toggleMobileNav} className="text-white">
+              <span className="sr-only">Open main menu</span>
+              {mobileNavOpen ? (
+                <X className="block h-6 w-6" aria-hidden="true" />
+              ) : (
+                <Menu className="block h-6 w-6" aria-hidden="true" />
+              )}
+            </Button>
+          </div>
+        </div>
       </div>
-    </section>
+
+      <AnimatePresence>
+        {mobileNavOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden"
+          >
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+              {navItems.map((item) => (
+                <div key={item.name}>
+                  {item.dropdownItems ? (
+                    <>
+                      <button
+                        onClick={() => setOpenDropdown(openDropdown === item.name ? null : item.name)}
+                        className="w-full text-left text-white hover:bg-blue-800/50 hover:text-white px-3 py-2 rounded-md text-base font-medium flex items-center justify-start"
+                      >
+                        {item.name}
+                        <ChevronDown className={`ml-1 h-4 w-4 transition-transform ${openDropdown === item.name ? 'rotate-180' : ''}`} />
+                      </button>
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ 
+                          height: openDropdown === item.name ? 'auto' : 0,
+                          opacity: openDropdown === item.name ? 1 : 0
+                        }}
+                        transition={{ duration: 0.2 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="pl-6 space-y-1">
+                          {item.dropdownItems.map((dropdownItem) => (
+                            <Link
+                              key={dropdownItem.name}
+                              href={dropdownItem.href}
+                              onClick={closeMobileNav}
+                              className="text-gray-300 hover:bg-blue-800/50 hover:text-white block px-3 py-2 rounded-md text-sm"
+                            >
+                              {dropdownItem.name}
+                            </Link>
+                          ))}
+                        </div>
+                      </motion.div>
+                    </>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      onClick={closeMobileNav}
+                      className="text-white hover:bg-blue-800/50 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                    >
+                      {item.name}
+                    </Link>
+                  )}
+                </div>
+              ))}
+            </div>
+            <div className="pt-4 pb-3 border-t border-gray-700">
+              <div className="mt-3 px-2">
+                <Button asChild variant="outline" className="w-full text-white border-white hover:bg-blue-800/50">
+                  <Link href="/contact" onClick={closeMobileNav}>Contactează-ne</Link>
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </nav>
   )
 }
 

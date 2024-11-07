@@ -108,12 +108,12 @@ const TechWorkProcess = () => {
           Cum Lucrăm
         </h2>
         <div className="max-w-5xl mx-auto">
-          <div className="p-8 lg:p-16 bg-black/30 backdrop-blur-sm rounded-3xl border border-white/10">
+          <div className="md:p-8 lg:p-16 md:bg-black/30 md:backdrop-blur-sm md:rounded-3xl md:border md:border-white/10">
             <div className="flex flex-wrap -mx-4 mb-12">
               {steps.map((step, index) => (
                 <div key={index} className="w-full md:w-1/3 px-4 mb-8 md:mb-0">
                   <motion.button
-                    className={`w-full p-6 rounded-xl transition-all duration-300 ${
+                    className={`w-full px-6 py-2 rounded-xl transition-all duration-300 ${
                       activeStep === index ? `${step.color} shadow-lg` : 'bg-white/10 hover:bg-white/20'
                     }`}
                     onClick={() => setActiveStep(index)}
@@ -134,7 +134,7 @@ const TechWorkProcess = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="bg-white/10 rounded-xl p-4"
+              className="md:bg-white/10 md:rounded-xl md:p-4"
             >
               <h3 className="text-2xl text-white font-bold mb-4">{steps[activeStep].title}</h3>
               <p className="text-lg text-gray-300 leading-relaxed mb-6">{steps[activeStep].description}</p>
